@@ -1,15 +1,15 @@
 # MiniMundoEducativo
 
-Aplicación educativa infantil desarrollada con React Native y Expo SDK 54. Combina una actividad central de reconocimiento de vocales en sonidos de animales con cinco minijuegos, progreso local y una interfaz táctil de alto contraste para Android e iOS.
+Aplicación educativa infantil desarrollada con React Native y Expo SDK 54. Combina una actividad central de reconocimiento de vocales en sonidos de animales con dos juegos complementarios, progreso local y una interfaz táctil de alto contraste para Android e iOS.
 
 ## Funcionalidades
 
-- **Vocales y sonidos:** el niño identifica y encierra las vocales de `CUAC`, `MIAU`, `MUUU`, `GUAU` y `CROAC`.
+- **Vocales y sonidos:** el niño escucha, identifica y encierra las vocales de `CUAC`, `MIAU`, `MUUU`, `GUAU` y `CROAC`; cada animal reproduce su sonido automáticamente y permite repetirlo.
 - **Resultados educativos:** muestra el total encontrado de A, E, I, O y U, los intentos con consonantes y el puntaje final.
 - **Car Jam:** tres rompecabezas con carros, puntaje, reinicio y pistas visuales.
 - **Perfil local:** conserva el nombre o apodo del jugador.
 - **Historial:** guarda hasta 50 resultados y permite consultarlos o eliminarlos.
-- **Minijuegos adicionales:** Animales, Números, Colores y Profesiones.
+- **Juegos complementarios:** Profesiones y Car Jam.
 - **Uso sin conexión:** los recursos y los datos principales permanecen en el dispositivo.
 
 ## Estructura

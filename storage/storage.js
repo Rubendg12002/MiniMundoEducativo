@@ -8,6 +8,8 @@ const CLAVES = {
   progresoCarJam: "@mini_mundo:progreso_car_jam",
 };
 
+const TIPOS_RETIRADOS = new Set(["Animales", "Colores", "Numeros"]);
+
 const leerJSON = async (clave, valorPredeterminado) => {
   try {
     const valor = await AsyncStorage.getItem(clave);
@@ -41,16 +43,28 @@ export const obtenerNombre = async () => {
 };
 
 /** Obtiene el historial completo, ordenado del más reciente al más antiguo. */
-export const obtenerHistorial = async () =>
-  leerJSON(CLAVES.historial, []);
+export const obtenerHistorial = async () => {
+  const historial = await leerJSON(CLAVES.historial, []);
+  return historial.filter((resultado) => !TIPOS_RETIRADOS.has(resultado.tipo));
+};
 
 /** Obtiene el último resultado almacenado. */
-export const obtenerUltimoResultado = async () =>
-  leerJSON(CLAVES.ultimoResultado, null);
+export const obtenerUltimoResultado = async () => {
+  const ultimoResultado = await leerJSON(CLAVES.ultimoResultado, null);
+  return ultimoResultado && !TIPOS_RETIRADOS.has(ultimoResultado.tipo)
+    ? ultimoResultado
+    : null;
+};
 
 /** Obtiene los mejores puntajes separados por minijuego. */
-export const obtenerMejoresPuntajes = async () =>
-  leerJSON(CLAVES.mejoresPuntajes, {});
+export const obtenerMejoresPuntajes = async () => {
+  const mejoresPuntajes = await leerJSON(CLAVES.mejoresPuntajes, {});
+  return Object.fromEntries(
+    Object.entries(mejoresPuntajes).filter(
+      ([tipo]) => !TIPOS_RETIRADOS.has(tipo)
+    )
+  );
+};
 
 /**
  * Guarda un resultado, actualiza el historial y conserva el mejor puntaje

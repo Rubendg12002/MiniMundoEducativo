@@ -13,7 +13,12 @@ export default function Header({ navigation }) {
         <Text style={styles.titulo}>Mini Mundo</Text>
       </View>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
+      <TouchableOpacity
+        accessibilityLabel="Ir al inicio"
+        accessibilityRole="button"
+        hitSlop={10}
+        onPress={() => navigation.navigate("Inicio")}
+      >
         <Ionicons name="home-outline" size={28} color="#2D6F83" />
       </TouchableOpacity>
     </View>

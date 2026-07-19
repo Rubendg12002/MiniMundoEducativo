@@ -18,9 +18,6 @@ import { borrarHistorial, obtenerHistorial } from "../storage/storage";
 const nombresJuegos = {
   VocalesAnimales: "Vocales y sonidos",
   CarJam: "Car Jam",
-  Animales: "Animales",
-  Numeros: "Números",
-  Colores: "Colores",
   Profesiones: "Profesiones",
 };
 

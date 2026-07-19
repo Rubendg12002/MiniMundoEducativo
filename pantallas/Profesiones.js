@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Header from "../componentes/Header";
 import BarraInferior from "../componentes/BarraInferior";
-import { preguntasProfesiones } from "../data/juegos";
+import { preguntasProfesiones } from "../data/profesiones";
 
 export default function Profesiones({ navigation }) {
   const [indice, setIndice] = useState(0);

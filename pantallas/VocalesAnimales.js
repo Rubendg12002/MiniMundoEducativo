@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Image,
   SafeAreaView,
@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as Speech from "expo-speech";
 
 import Header from "../componentes/Header";
 import BarraInferior from "../componentes/BarraInferior";
@@ -46,6 +47,26 @@ export default function VocalesAnimales({ navigation }) {
   const actividadCompleta = posicionesVocales.every((posicion) =>
     seleccionadas.includes(posicion)
   );
+
+  const reproducirSonido = useCallback(async () => {
+    await Speech.stop();
+    Speech.speak(actividad.sonido.toLowerCase(), {
+      language: "es-ES",
+      pitch: 1.15,
+      rate: 0.72,
+      volume: 1,
+      useApplicationAudioSession: false,
+    });
+  }, [actividad.sonido]);
+
+  useEffect(() => {
+    const temporizador = setTimeout(reproducirSonido, 350);
+
+    return () => {
+      clearTimeout(temporizador);
+      Speech.stop();
+    };
+  }, [reproducirSonido]);
 
   const tocarLetra = (letra, posicion) => {
     if (seleccionadas.includes(posicion)) {
@@ -130,10 +151,20 @@ export default function VocalesAnimales({ navigation }) {
             resizeMode="contain"
           />
           <Text style={styles.nombreAnimal}>{actividad.animal}</Text>
-          <View style={styles.sonidoTitulo}>
+          <TouchableOpacity
+            accessibilityHint="Reproduce nuevamente el sonido del animal"
+            accessibilityLabel={`Escuchar ${actividad.sonido}`}
+            accessibilityRole="button"
+            onPress={reproducirSonido}
+            style={styles.botonEscuchar}
+          >
             <Ionicons name="volume-high" size={24} color="#2D6F83" />
-            <Text style={styles.pregunta}>¿Qué vocales escuchas?</Text>
-          </View>
+            <Text style={styles.textoEscuchar}>
+              Escuchar {actividad.sonido}
+            </Text>
+          </TouchableOpacity>
+
+          <Text style={styles.pregunta}>¿Qué vocales escuchas?</Text>
 
           <View style={styles.letras}>
             {letras.map((letra, posicion) => {
@@ -247,13 +278,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 4,
   },
-  sonidoTitulo: {
+  botonEscuchar: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     gap: 8,
-    marginTop: 8,
+    minHeight: 48,
+    backgroundColor: "#DFF3FA",
+    borderRadius: 24,
+    paddingHorizontal: 18,
+    marginTop: 10,
   },
-  pregunta: { color: "#2D6F83", fontWeight: "bold", fontSize: 17 },
+  textoEscuchar: {
+    color: "#2D6F83",
+    fontSize: 17,
+    fontWeight: "bold",
+  },
+  pregunta: {
+    color: "#2D6F83",
+    fontWeight: "bold",
+    fontSize: 17,
+    marginTop: 12,
+  },
   letras: {
     flexDirection: "row",
     flexWrap: "wrap",

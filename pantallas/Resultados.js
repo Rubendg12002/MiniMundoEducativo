@@ -17,7 +17,7 @@ const VOCALES = ["A", "E", "I", "O", "U"];
 export default function Resultados({ navigation, route }) {
   const puntaje = route.params?.puntaje ?? 0;
   const total = route.params?.total ?? 1;
-  const tipo = route.params?.tipo || "Animales";
+  const tipo = route.params?.tipo || "Actividad";
   const mensaje = route.params?.mensaje || "¡Excelente!";
   const detalle = route.params?.detalle || "Lo hiciste muy bien explorando";
   const imagen = route.params?.imagen || require("../assets/imagenes/perro.png");

@@ -54,48 +54,6 @@ export default function Menu({ navigation }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.card, styles.cardVerde]}
-          onPress={() => navigation.navigate("Animales")}
-        >
-          <View style={styles.imagenBox}>
-            <Image
-              source={require("../assets/imagenes/animales.png")}
-              style={styles.imagen}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={styles.texto}>🐶 Juego de{"\n"}Animales</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.card, styles.cardAmarillo]}
-          onPress={() => navigation.navigate("Numeros")}
-        >
-          <View style={styles.imagenBox}>
-            <Image
-              source={require("../assets/imagenes/numeros.png")}
-              style={styles.imagen}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={styles.texto}>🔢 Juego de{"\n"}Números</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.card, styles.cardAzul]}
-          onPress={() => navigation.navigate("Colores")}
-        >
-          <View style={styles.imagenBox}>
-            <Image
-              source={require("../assets/imagenes/colores.png")}
-              style={styles.imagen}
-              resizeMode="contain"
-            />
-          </View>
-          <Text style={styles.texto}>🌸 Juego de{"\n"}Colores</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
           style={[styles.card, styles.cardNaranja]}
           onPress={() => navigation.navigate("Profesiones")}
         >
@@ -158,21 +116,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#E8D9FF",
     borderBottomWidth: 5,
     borderBottomColor: "#7957A8",
-  },
-  cardVerde: {
-    backgroundColor: "#BDF2CC",
-    borderBottomWidth: 5,
-    borderBottomColor: "#47785D",
-  },
-  cardAmarillo: {
-    backgroundColor: "#E6D97D",
-    borderBottomWidth: 5,
-    borderBottomColor: "#8C8032",
-  },
-  cardAzul: {
-    backgroundColor: "#A9DFF1",
-    borderBottomWidth: 5,
-    borderBottomColor: "#2D6F83",
   },
   cardNaranja: {
     backgroundColor: "#FFD8A8",

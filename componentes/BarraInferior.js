@@ -1,49 +1,55 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+const accesos = [
+  {
+    id: "menu",
+    etiqueta: "Juegos",
+    icono: "map-outline",
+    destino: "Menu",
+  },
+  {
+    id: "historial",
+    etiqueta: "Progreso",
+    icono: "star-outline",
+    destino: "Historial",
+  },
+  {
+    id: "home",
+    etiqueta: "Perfil",
+    icono: "person-circle-outline",
+    destino: "Inicio",
+  },
+];
+
 export default function BarraInferior({ navigation, activo = "menu" }) {
-  const esJuego = [
-    "animales",
-    "numeros",
-    "colores",
-    "profesiones",
-    "carjam",
-    "vocales",
-  ].includes(activo);
-
   return (
-    <View style={styles.nav}>
-      <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
-        <Ionicons name="map-outline" size={26} color="#294F5D" />
-      </TouchableOpacity>
+    <View accessibilityRole="toolbar" style={styles.nav}>
+      {accesos.map((acceso) => {
+        const estaActivo = activo === acceso.id;
 
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Historial")}
-        style={activo === "historial" ? styles.activoSecundario : null}
-      >
-        <Ionicons name="star-outline" size={26} color="#294F5D" />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={esJuego ? styles.activo : null}
-      >
-        <Ionicons
-          name={
-            activo === "carjam"
-              ? "car-sport"
-              : activo === "vocales"
-                ? "chatbubbles"
-                : "paw"
-          }
-          size={28}
-          color="#294F5D"
-        />
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
-        <Ionicons name="person-circle-outline" size={28} color="#294F5D" />
-      </TouchableOpacity>
+        return (
+          <TouchableOpacity
+            key={acceso.id}
+            accessibilityLabel={`Ir a ${acceso.etiqueta}`}
+            accessibilityRole="button"
+            accessibilityState={{ selected: estaActivo }}
+            hitSlop={5}
+            onPress={() => navigation.navigate(acceso.destino)}
+            style={[styles.item, estaActivo ? styles.itemActivo : null]}
+          >
+            <Ionicons
+              name={acceso.icono}
+              size={24}
+              color={estaActivo ? "#2D6F83" : "#5A777F"}
+            />
+            <Text style={[styles.etiqueta, estaActivo ? styles.etiquetaActiva : null]}>
+              {acceso.etiqueta}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -54,23 +60,31 @@ const styles = StyleSheet.create({
     bottom: 15,
     left: 18,
     right: 18,
-    height: 70,
+    height: 72,
     backgroundColor: "#DFF3FA",
     borderRadius: 24,
     borderWidth: 1,
     borderColor: "#8DD4EA",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     alignItems: "center",
+    paddingHorizontal: 5,
+    elevation: 5,
   },
-  activo: {
-    backgroundColor: "#BDF2CC",
-    padding: 15,
-    borderRadius: 35,
+  item: {
+    minWidth: 68,
+    minHeight: 55,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 5,
   },
-  activoSecundario: {
-    backgroundColor: "#FFF19B",
-    padding: 12,
-    borderRadius: 28,
+  itemActivo: { backgroundColor: "#BDF2CC" },
+  etiqueta: {
+    color: "#5A777F",
+    fontSize: 11,
+    fontWeight: "600",
+    marginTop: 2,
   },
+  etiquetaActiva: { color: "#2D6F83", fontWeight: "bold" },
 });

@@ -13,7 +13,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 
-import BarraInferior from "../componentes/BarraInferior";
 import {
   guardarNombre,
   obtenerNombre,
@@ -23,9 +22,6 @@ import {
 const nombresJuegos = {
   VocalesAnimales: "Vocales y sonidos",
   CarJam: "Car Jam",
-  Animales: "Animales",
-  Numeros: "Números",
-  Colores: "Colores",
   Profesiones: "Profesiones",
 };
 
@@ -56,7 +52,7 @@ export default function Inicio({ navigation }) {
     }, [])
   );
 
-  const comenzar = async () => {
+  const guardarYContinuar = async (destino) => {
     if (!nombre.trim()) {
       Alert.alert("¿Cómo te llamas?", "Escribe tu nombre para guardar tu progreso.");
       return;
@@ -64,11 +60,13 @@ export default function Inicio({ navigation }) {
 
     try {
       await guardarNombre(nombre);
-      navigation.navigate("Menu");
+      navigation.navigate(destino);
     } catch (error) {
       Alert.alert("No pudimos guardar el nombre", error.message);
     }
   };
+
+  const comenzar = () => guardarYContinuar("Menu");
 
   return (
     <SafeAreaView style={styles.container}>
@@ -127,23 +125,17 @@ export default function Inicio({ navigation }) {
           <Text style={styles.textoBoton}>COMENZAR</Text>
         </TouchableOpacity>
 
-        <View style={styles.opciones}>
-          <View style={styles.botonSecundarioVerde}>
-            <Ionicons name="volume-medium" size={26} color="#43775D" />
-            <Text style={styles.textoSecundario}>Sonidos</Text>
-          </View>
-
-          <TouchableOpacity
-            style={styles.botonSecundarioAmarillo}
-            onPress={() => navigation.navigate("Historial")}
-          >
-            <Ionicons name="star" size={26} color="#6D641F" />
-            <Text style={styles.textoSecundario}>Puntajes</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity
+          accessibilityLabel="Ver puntajes"
+          accessibilityRole="button"
+          style={styles.botonSecundarioAmarillo}
+          onPress={() => navigation.navigate("Historial")}
+        >
+          <Ionicons name="star" size={26} color="#6D641F" />
+          <Text style={styles.textoSecundario}>Puntajes</Text>
+        </TouchableOpacity>
       </ScrollView>
 
-      <BarraInferior navigation={navigation} activo="home" />
     </SafeAreaView>
   );
 }
@@ -154,7 +146,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 105,
+    paddingBottom: 35,
   },
   logo: { width: 82, height: 82, marginBottom: 12 },
   titulo: {
@@ -225,17 +217,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textoBoton: { fontSize: 22, color: "#2D6F83", fontWeight: "bold" },
-  opciones: { flexDirection: "row", gap: 18 },
-  botonSecundarioVerde: {
-    width: 125,
-    height: 66,
-    backgroundColor: "#BDF2CC",
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   botonSecundarioAmarillo: {
-    width: 125,
+    width: 180,
     height: 66,
     backgroundColor: "#E6D97D",
     borderRadius: 25,
