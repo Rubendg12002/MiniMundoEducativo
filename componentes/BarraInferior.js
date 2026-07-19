@@ -3,6 +3,14 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function BarraInferior({ navigation, activo = "menu" }) {
+  const esJuego = [
+    "animales",
+    "numeros",
+    "colores",
+    "profesiones",
+    "carjam",
+  ].includes(activo);
+
   return (
     <View style={styles.nav}>
       <TouchableOpacity onPress={() => navigation.navigate("Menu")}>
@@ -14,15 +22,13 @@ export default function BarraInferior({ navigation, activo = "menu" }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={
-          activo === "animales" ||
-          activo === "numeros" ||
-          activo === "colores"
-            ? styles.activo
-            : null
-        }
+        style={esJuego ? styles.activo : null}
       >
-        <Ionicons name="paw" size={28} color="#294F5D" />
+        <Ionicons
+          name={activo === "carjam" ? "car-sport" : "paw"}
+          size={28}
+          color="#294F5D"
+        />
       </TouchableOpacity>
 
       <TouchableOpacity>

@@ -13,6 +13,9 @@ export default function Resultados({ navigation, route }) {
   const total = route.params?.total || 1;
   const tipo = route.params?.tipo || "Animales";
   const mensaje = route.params?.mensaje || "¡Excelente!";
+  const detalle = route.params?.detalle || "Lo hiciste muy bien explorando";
+  const imagen =
+    route.params?.imagen || require("../assets/imagenes/perro.png");
 
   const volverAJugar = () => {
     navigation.navigate(tipo);
@@ -24,15 +27,13 @@ export default function Resultados({ navigation, route }) {
         <Text style={styles.estrellas}>⭐ ⭐</Text>
 
         <Image
-          source={require("../assets/imagenes/perro.png")}
+          source={imagen}
           style={styles.perro}
           resizeMode="contain"
         />
 
         <Text style={styles.mensaje}>{mensaje}</Text>
-        <Text style={styles.detalle}>
-          Lo hiciste muy bien explorando
-        </Text>
+        <Text style={styles.detalle}>{detalle}</Text>
         <Text style={styles.puntaje}>
           Puntaje: {puntaje}/{total}
         </Text>

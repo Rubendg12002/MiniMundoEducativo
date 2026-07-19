@@ -8,6 +8,7 @@ import Numeros from "../pantallas/Numeros";
 import Colores from "../pantallas/Colores";
 import Resultados from "../pantallas/Resultados";
 import Profesiones from "../pantallas/Profesiones";
+import CarJam from "../pantallas/CarJam";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Colores" component={Colores} />
       <Stack.Screen name="Resultados" component={Resultados} />
       <Stack.Screen name="Profesiones" component={Profesiones} />
+      <Stack.Screen name="CarJam" component={CarJam} />
     </Stack.Navigator>
   );
 }

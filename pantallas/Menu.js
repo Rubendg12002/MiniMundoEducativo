@@ -76,6 +76,21 @@ export default function Menu({ navigation }) {
 
           <Text style={styles.texto}>👩‍⚕️ Juego de{"\n"}Profesiones</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.card, styles.cardRosa]}
+          onPress={() => navigation.navigate("CarJam")}
+        >
+          <View style={styles.imagenBox}>
+            <Image
+              source={require("../assets/imagenes/carJam/car-rojo.png")}
+              style={styles.imagenCarro}
+              resizeMode="contain"
+            />
+          </View>
+
+          <Text style={styles.texto}>🚗 Car Jam</Text>
+        </TouchableOpacity>
       </ScrollView>
 
       <BarraInferior navigation={navigation} activo="menu" />
@@ -127,6 +142,12 @@ const styles = StyleSheet.create({
     borderBottomColor: "#C77A1F",
   },
 
+  cardRosa: {
+    backgroundColor: "#F9CDD2",
+    borderBottomWidth: 5,
+    borderBottomColor: "#C85D67",
+  },
+
   imagenBox: {
     width: "88%",
     height: 75,
@@ -141,6 +162,11 @@ const styles = StyleSheet.create({
     width: 82,
     height: 82,
     borderRadius: 41,
+  },
+
+  imagenCarro: {
+    width: 58,
+    height: 78,
   },
 
   texto: {
