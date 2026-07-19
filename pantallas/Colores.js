@@ -28,6 +28,8 @@ export default function Colores({ navigation }) {
         total: preguntasColores.length,
         tipo: "Colores",
         mensaje: nuevoPuntaje === preguntasColores.length ? "¡Excelente!" : "Sigue practicando",
+        detalle: "Completaste el juego de colores",
+        imagen: require("../assets/imagenes/colores.png"),
       });
     }
   };
@@ -54,13 +56,26 @@ export default function Colores({ navigation }) {
         {pregunta.opciones.map((opcion) => (
           <TouchableOpacity
             key={opcion.texto}
+            accessibilityLabel={`Color ${opcion.texto}`}
+            accessibilityRole="button"
             style={[styles.botonColor, { backgroundColor: opcion.color }]}
             onPress={() => responder(opcion)}
           >
             <View style={[styles.punto, { backgroundColor: opcion.color }]} />
-            <Text style={styles.textoColor}>{opcion.texto}</Text>
+            <Text
+              style={[
+                styles.textoColor,
+                opcion.texto === "Amarillo" ? styles.textoColorOscuro : null,
+              ]}
+            >
+              {opcion.texto}
+            </Text>
           </TouchableOpacity>
         ))}
+
+        <Text style={styles.progreso}>
+          Pregunta {indice + 1} de {preguntasColores.length}
+        </Text>
       </View>
 
       <BarraInferior navigation={navigation} activo="colores" />
@@ -117,5 +132,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 24,
     fontWeight: "bold",
+  },
+  textoColorOscuro: { color: "#5C4B00" },
+  progreso: {
+    textAlign: "center",
+    color: "#5A777F",
+    fontWeight: "bold",
+    marginTop: 5,
   },
 });

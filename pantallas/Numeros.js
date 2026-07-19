@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Image,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
@@ -29,6 +30,8 @@ export default function Numeros({ navigation }) {
         total: preguntasNumeros.length,
         tipo: "Numeros",
         mensaje: nuevoPuntaje === preguntasNumeros.length ? "¡Muy Bien!" : "Sigue practicando",
+        detalle: "Completaste el juego de números",
+        imagen: require("../assets/imagenes/manzana.png"),
       });
     }
   };
@@ -37,7 +40,10 @@ export default function Numeros({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Header navigation={navigation} />
 
-      <View style={styles.contenido}>
+      <ScrollView
+        contentContainerStyle={styles.contenido}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.card}>
           <Text style={styles.pregunta}>{pregunta.pregunta}</Text>
 
@@ -52,6 +58,8 @@ export default function Numeros({ navigation }) {
           {pregunta.opciones.map((numero) => (
             <TouchableOpacity
               key={numero}
+              accessibilityLabel={`Responder ${numero}`}
+              accessibilityRole="button"
               style={styles.botonNumero}
               onPress={() => responder(numero)}
             >
@@ -59,7 +67,11 @@ export default function Numeros({ navigation }) {
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+
+        <Text style={styles.progreso}>
+          Pregunta {indice + 1} de {preguntasNumeros.length}
+        </Text>
+      </ScrollView>
 
       <BarraInferior navigation={navigation} activo="numeros" />
     </SafeAreaView>
@@ -69,7 +81,7 @@ export default function Numeros({ navigation }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#EFFAFF" },
   contenido: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 28,
     paddingTop: 70,
     paddingBottom: 95,
@@ -121,5 +133,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 6,
     borderRadius: 8,
+  },
+  progreso: {
+    textAlign: "center",
+    color: "#5A777F",
+    fontWeight: "bold",
+    marginTop: 22,
   },
 });

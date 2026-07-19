@@ -32,6 +32,8 @@ export default function Profesiones({ navigation }) {
           nuevoPuntaje === preguntasProfesiones.length
             ? "¡Excelente!"
             : "Sigue practicando",
+        detalle: "Completaste el juego de profesiones",
+        imagen: require("../assets/imagenes/doctor.png"),
       });
     }
   };
@@ -49,6 +51,8 @@ export default function Profesiones({ navigation }) {
           {pregunta.opciones.map((opcion) => (
             <TouchableOpacity
               key={opcion.nombre}
+              accessibilityLabel={`Profesión ${opcion.nombre}`}
+              accessibilityRole="button"
               style={styles.card}
               onPress={() => responder(opcion)}
             >

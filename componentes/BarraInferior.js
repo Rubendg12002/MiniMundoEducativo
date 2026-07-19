@@ -9,6 +9,7 @@ export default function BarraInferior({ navigation, activo = "menu" }) {
     "colores",
     "profesiones",
     "carjam",
+    "vocales",
   ].includes(activo);
 
   return (
@@ -17,7 +18,10 @@ export default function BarraInferior({ navigation, activo = "menu" }) {
         <Ionicons name="map-outline" size={26} color="#294F5D" />
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Historial")}
+        style={activo === "historial" ? styles.activoSecundario : null}
+      >
         <Ionicons name="star-outline" size={26} color="#294F5D" />
       </TouchableOpacity>
 
@@ -25,14 +29,20 @@ export default function BarraInferior({ navigation, activo = "menu" }) {
         style={esJuego ? styles.activo : null}
       >
         <Ionicons
-          name={activo === "carjam" ? "car-sport" : "paw"}
+          name={
+            activo === "carjam"
+              ? "car-sport"
+              : activo === "vocales"
+                ? "chatbubbles"
+                : "paw"
+          }
           size={28}
           color="#294F5D"
         />
       </TouchableOpacity>
 
-      <TouchableOpacity>
-        <Ionicons name="settings-outline" size={26} color="#294F5D" />
+      <TouchableOpacity onPress={() => navigation.navigate("Inicio")}>
+        <Ionicons name="person-circle-outline" size={28} color="#294F5D" />
       </TouchableOpacity>
     </View>
   );
@@ -57,5 +67,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#BDF2CC",
     padding: 15,
     borderRadius: 35,
+  },
+  activoSecundario: {
+    backgroundColor: "#FFF19B",
+    padding: 12,
+    borderRadius: 28,
   },
 });

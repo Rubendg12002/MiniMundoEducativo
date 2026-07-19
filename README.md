@@ -1,42 +1,46 @@
 # MiniMundoEducativo
 
-Aplicación educativa infantil desarrollada con React Native y Expo SDK 54. Presenta actividades táctiles, imágenes grandes y una interfaz de colores pastel diseñada para Android e iOS.
+Aplicación educativa infantil desarrollada con React Native y Expo SDK 54. Combina una actividad central de reconocimiento de vocales en sonidos de animales con cinco minijuegos, progreso local y una interfaz táctil de alto contraste para Android e iOS.
 
-## Minijuegos
+## Funcionalidades
 
-- Animales: reconocer animales y sus sonidos.
-- Números: contar objetos.
-- Colores: identificar colores.
-- Profesiones: reconocer diferentes profesiones.
-- Car Jam: liberar carros de una cuadrícula siguiendo su dirección.
+- **Vocales y sonidos:** el niño identifica y encierra las vocales de `CUAC`, `MIAU`, `MUUU`, `GUAU` y `CROAC`.
+- **Resultados educativos:** muestra el total encontrado de A, E, I, O y U, los intentos con consonantes y el puntaje final.
+- **Car Jam:** tres rompecabezas con carros, puntaje, reinicio y pistas visuales.
+- **Perfil local:** conserva el nombre o apodo del jugador.
+- **Historial:** guarda hasta 50 resultados y permite consultarlos o eliminarlos.
+- **Minijuegos adicionales:** Animales, Números, Colores y Profesiones.
+- **Uso sin conexión:** los recursos y los datos principales permanecen en el dispositivo.
 
-## Car Jam
-
-Car Jam es un rompecabezas 2D con tres niveles. Cada carro ocupa una casilla y apunta hacia arriba, abajo, izquierda o derecha. Cuando el jugador toca un carro, el juego revisa todas las casillas que están delante:
-
-- Si otro vehículo bloquea el camino, el carro permanece en el tablero.
-- Si el camino está libre hasta el borde, el carro sale.
-- Al liberar todos los vehículos, el jugador obtiene 10 puntos y avanza.
-- Los tres niveles permiten conseguir un máximo de 30 puntos.
-
-El botón **Reiniciar** restaura únicamente el nivel actual y conserva los puntos obtenidos en niveles anteriores.
-
-## Estructura de Car Jam
+## Estructura
 
 ```text
-assets/imagenes/carJam/
-componentes/carJam/
-  IndicadorNivel.js
-  TableroCarJam.js
-  VehiculoCarJam.js
-data/nivelesCarJam.js
-game/carJamLogic.js
-pantallas/CarJam.js
+MiniMundoEducativo/
+├── App.js                         # Contenedor de navegación
+├── navegacion/AppNavigator.js     # Stack principal (10 pantallas)
+├── pantallas/                     # Inicio, menú, juegos, historial y resultados
+├── componentes/                   # Cabecera, barra inferior y piezas reutilizables
+│   └── carJam/                    # Tablero, vehículos e indicador de nivel
+├── data/                          # Preguntas, sonidos y niveles declarativos
+├── game/carJamLogic.js            # Reglas puras del rompecabezas
+├── storage/storage.js             # CRUD local con AsyncStorage
+├── assets/imagenes/               # Ilustraciones y texturas locales
+├── app.json                       # Configuración Expo
+├── eas.json                       # Perfiles APK/AAB de EAS Build
+└── PRIVACY_POLICY.md              # Política de privacidad base
 ```
 
-Los niveles, la lógica y los componentes visuales se mantienen separados. Los carros utilizados pertenecen al [Kenney Racing Pack](https://www.kenney.nl/assets/racing-pack), publicado con licencia Creative Commons CC0. La licencia original se conserva en `assets/imagenes/carJam/LICENSE-KENNEY.txt`.
+## Persistencia local
 
-La textura de carretera es un recurso local generado para el proyecto. La aplicación no necesita conexión a internet para mostrar el tablero o los vehículos.
+`storage/storage.js` encapsula AsyncStorage y ofrece operaciones para crear, consultar, actualizar y borrar datos:
+
+- `guardarNombre()` / `obtenerNombre()`;
+- `guardarResultado()` / `obtenerHistorial()`;
+- `obtenerUltimoResultado()` / `obtenerMejoresPuntajes()`;
+- `borrarHistorial()`;
+- `guardarProgresoCarJam()` / `obtenerProgresoCarJam()`.
+
+No se requiere backend ni conexión de red.
 
 ## Requisitos
 
@@ -44,39 +48,45 @@ La textura de carretera es un recurso local generado para el proyecto. La aplica
 - npm.
 - Expo Go o un emulador compatible con Expo SDK 54.
 
-## Instalación
+## Instalación y ejecución
 
 ```bash
 npm install
-```
-
-## Ejecución
-
-```bash
 npx expo start
 ```
 
-También están disponibles:
+Comandos alternativos:
 
 ```bash
 npm run android
 npm run ios
+npm run web
 ```
 
-## Compatibilidad y dependencias
+## Compilación para Android
 
-Car Jam utiliza componentes normales de React Native, la navegación Stack actual y los componentes `Header` y `BarraInferior` existentes. No requiere motores de videojuegos ni dependencias nuevas.
+Antes de compilar se debe definir un identificador único en `app.json`, por ejemplo `expo.android.package`, y vincular el proyecto con una cuenta Expo mediante `eas init`.
 
-## Limitaciones actuales
+```bash
+npx eas-cli build --platform android --profile preview
+```
 
-- Los vehículos se controlan con toques; no existe arrastre ni física.
-- Los niveles son fijos.
-- La salida de los carros es inmediata y no tiene una animación compleja.
-- El proyecto actual no persiste puntajes entre sesiones.
+El perfil `preview` produce un APK instalable para pruebas. Para generar el Android App Bundle destinado a Google Play:
 
-## Posibles mejoras
+```bash
+npx eas-cli build --platform android --profile production
+```
 
-- Añadir más niveles y tableros rectangulares.
-- Animar la salida de cada vehículo.
-- Incorporar sonidos y vibración.
-- Guardar el progreso y los mejores puntajes por minijuego.
+La firma se administra con las credenciales seleccionadas durante EAS Build. La publicación final requiere cuenta de Google Play Console, ficha de tienda, capturas, clasificación de contenido y una URL pública para la política de privacidad.
+
+## Recursos visuales y licencias
+
+Los carros de Car Jam provienen del [Kenney Racing Pack](https://www.kenney.nl/assets/racing-pack), publicado bajo Creative Commons CC0; la copia de la licencia está en `assets/imagenes/carJam/LICENSE-KENNEY.txt`. La carretera y las ilustraciones nuevas de pato y rana son recursos locales creados para este proyecto.
+
+## Privacidad
+
+La aplicación no usa cuentas, publicidad ni analítica. El nombre y los puntajes se guardan solo en el dispositivo. La política base se encuentra en [PRIVACY_POLICY.md](PRIVACY_POLICY.md) y debe completarse con un correo y una URL pública antes de publicar.
+
+## Alcance pendiente de publicación
+
+El código y los perfiles de compilación quedan preparados, pero el identificador definitivo, la firma, la generación del AAB y el envío a Google Play dependen de las cuentas y credenciales del propietario.

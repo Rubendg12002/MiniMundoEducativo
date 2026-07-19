@@ -11,6 +11,7 @@ export default function TableroCarJam({
   tamano,
   onVehiculoPress,
   deshabilitado,
+  vehiculoDestacado,
 }) {
   const tamanoCelda = tamano / columnas;
   const alto = tamanoCelda * filas;
@@ -54,6 +55,7 @@ export default function TableroCarJam({
           tamano={tamanoCelda}
           onPress={onVehiculoPress}
           deshabilitado={deshabilitado}
+          destacado={vehiculo.id === vehiculoDestacado}
         />
       ))}
     </ImageBackground>

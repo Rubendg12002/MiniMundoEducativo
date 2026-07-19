@@ -17,6 +17,7 @@ import IndicadorNivel from "../componentes/carJam/IndicadorNivel";
 import TableroCarJam from "../componentes/carJam/TableroCarJam";
 import nivelesCarJam from "../data/nivelesCarJam";
 import { clonarNivel, puedeSalir } from "../game/carJamLogic";
+import { guardarProgresoCarJam } from "../storage/storage";
 
 const MENSAJE_INICIAL = "Toca un carro con el camino libre para sacarlo.";
 
@@ -30,6 +31,7 @@ export default function CarJam({ navigation }) {
   const [puntaje, setPuntaje] = useState(0);
   const [mensaje, setMensaje] = useState(MENSAJE_INICIAL);
   const [procesando, setProcesando] = useState(false);
+  const [vehiculoDestacado, setVehiculoDestacado] = useState(null);
 
   const montadoRef = useRef(true);
   const bloqueoRef = useRef(false);
@@ -63,6 +65,9 @@ export default function CarJam({ navigation }) {
 
     setPuntaje(nuevoPuntaje);
     setMensaje(`¡Nivel ${nivel.id} completado! Ganaste 10 puntos.`);
+    guardarProgresoCarJam(nivel.id, nuevoPuntaje).catch((error) =>
+      console.log("No se pudo guardar el progreso de Car Jam:", error)
+    );
     transicionRef.current = true;
 
     programar(() => {
@@ -85,6 +90,7 @@ export default function CarJam({ navigation }) {
       setNivel(siguienteNivel);
       setVehiculos(siguienteNivel.vehiculos);
       setMensaje(MENSAJE_INICIAL);
+      setVehiculoDestacado(null);
       setProcesando(false);
       bloqueoRef.current = false;
       transicionRef.current = false;
@@ -97,6 +103,7 @@ export default function CarJam({ navigation }) {
     }
 
     bloqueoRef.current = true;
+    setVehiculoDestacado(null);
     setProcesando(true);
 
     const vehiculo = vehiculos.find((item) => item.id === vehiculoId);
@@ -151,9 +158,29 @@ export default function CarJam({ navigation }) {
     setNivel(nivelReiniciado);
     setVehiculos(nivelReiniciado.vehiculos);
     setMensaje("Nivel reiniciado. Conservas los puntos anteriores.");
+    setVehiculoDestacado(null);
     setProcesando(false);
     bloqueoRef.current = false;
     transicionRef.current = false;
+  };
+
+  const mostrarPista = () => {
+    if (procesando || transicionRef.current) {
+      return;
+    }
+
+    try {
+      const sugerido = vehiculos.find((vehiculo) =>
+        puedeSalir(vehiculo, vehiculos, nivel.filas, nivel.columnas)
+      );
+
+      if (sugerido) {
+        setVehiculoDestacado(sugerido.id);
+        setMensaje("Pista: el carro iluminado tiene el camino libre.");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -196,6 +223,7 @@ export default function CarJam({ navigation }) {
           tamano={tamanoTablero}
           onVehiculoPress={seleccionarVehiculo}
           deshabilitado={procesando}
+          vehiculoDestacado={vehiculoDestacado}
         />
 
         <View style={styles.estado}>
@@ -208,6 +236,15 @@ export default function CarJam({ navigation }) {
         </View>
 
         <View style={styles.acciones}>
+          <TouchableOpacity
+            style={[styles.boton, styles.botonPista]}
+            onPress={mostrarPista}
+            disabled={procesando}
+          >
+            <Ionicons name="bulb" size={20} color="#6F5A21" />
+            <Text style={styles.textoPista}>Pista</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.boton, styles.botonReiniciar]}
             onPress={reiniciarNivel}
@@ -346,13 +383,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF19B",
     borderBottomWidth: 4,
     borderBottomColor: "#D8C95D",
-    marginRight: 6,
+    marginHorizontal: 4,
+  },
+  botonPista: {
+    backgroundColor: "#E6D97D",
+    borderBottomWidth: 4,
+    borderBottomColor: "#8C8032",
+    marginRight: 4,
   },
   botonVolver: {
     backgroundColor: "#DFF3FA",
     borderBottomWidth: 4,
     borderBottomColor: "#8DD4EA",
-    marginLeft: 6,
+    marginLeft: 4,
   },
   textoReiniciar: {
     color: "#6D641F",
@@ -365,5 +408,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginLeft: 7,
+  },
+  textoPista: {
+    color: "#6F5A21",
+    fontSize: 15,
+    fontWeight: "bold",
+    marginLeft: 5,
   },
 });

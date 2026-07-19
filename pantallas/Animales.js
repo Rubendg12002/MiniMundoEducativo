@@ -29,6 +29,12 @@ export default function Animales({ navigation }) {
       navigation.navigate("Resultados", {
         puntaje: nuevoPuntaje,
         total: preguntasAnimales.length,
+        tipo: "Animales",
+        mensaje:
+          nuevoPuntaje === preguntasAnimales.length
+            ? "¡Reconociste todos los sonidos!"
+            : "¡Sigue escuchando y aprendiendo!",
+        detalle: "Completaste el juego de sonidos de animales",
         imagen: require("../assets/imagenes/perro.png"),
       });
     }
@@ -47,6 +53,8 @@ export default function Animales({ navigation }) {
         {preguntaActual.opciones.map((opcion, index) => (
           <TouchableOpacity
             key={index}
+            accessibilityLabel={`${opcion.texto}, opción de respuesta`}
+            accessibilityRole="button"
             style={styles.opcion}
             onPress={() => responder(opcion)}
           >

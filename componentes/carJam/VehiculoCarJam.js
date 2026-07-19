@@ -28,6 +28,7 @@ export default function VehiculoCarJam({
   tamano,
   onPress,
   deshabilitado,
+  destacado,
 }) {
   const margen = Math.max(3, tamano * 0.07);
 
@@ -47,6 +48,7 @@ export default function VehiculoCarJam({
           height: tamano - margen * 2,
           backgroundColor: `${vehiculo.color}44`,
         },
+        destacado ? styles.destacado : null,
       ]}
     >
       <View style={styles.brillo} />
@@ -90,6 +92,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.28,
     shadowRadius: 2,
     overflow: "hidden",
+  },
+  destacado: {
+    borderWidth: 4,
+    borderColor: "#FFF19B",
+    shadowColor: "#D8C95D",
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
   },
   brillo: {
     position: "absolute",
