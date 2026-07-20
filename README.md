@@ -6,7 +6,8 @@ Aplicación educativa infantil desarrollada con React Native y Expo SDK 54. Comb
 
 - **Vocales y sonidos:** el niño escucha, identifica y encierra las vocales de `CUAC`, `MIAU`, `MUUU`, `GUAU` y `CROAC`; cada animal reproduce su sonido automáticamente y permite repetirlo.
 - **Resultados educativos:** muestra el total encontrado de A, E, I, O y U, los intentos con consonantes y el puntaje final.
-- **Car Jam:** tres rompecabezas con carros, puntaje, reinicio y pistas visuales.
+- **Car Jam:** genera posiciones nuevas de forma inteligente, conserva la dirección de cada carro y acepta únicamente tableros válidos, con bloqueos y solución completa.
+- **Profesiones:** cambia el orden de las preguntas y de las respuestas en cada partida.
 - **Perfil local:** conserva el nombre o apodo del jugador.
 - **Historial:** guarda hasta 50 resultados y permite consultarlos o eliminarlos.
 - **Juegos complementarios:** Profesiones y Car Jam.

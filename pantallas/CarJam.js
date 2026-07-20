@@ -16,7 +16,10 @@ import BarraInferior from "../componentes/BarraInferior";
 import IndicadorNivel from "../componentes/carJam/IndicadorNivel";
 import TableroCarJam from "../componentes/carJam/TableroCarJam";
 import nivelesCarJam from "../data/nivelesCarJam";
-import { clonarNivel, puedeSalir } from "../game/carJamLogic";
+import {
+  crearNivelConPosicionesAleatorias,
+  puedeSalir,
+} from "../game/carJamLogic";
 import { guardarProgresoCarJam } from "../storage/storage";
 
 const MENSAJE_INICIAL = "Toca un carro con el camino libre para sacarlo.";
@@ -26,7 +29,9 @@ export default function CarJam({ navigation }) {
   const tamanoTablero = Math.min(width - 36, 390);
 
   const [indiceNivel, setIndiceNivel] = useState(0);
-  const [nivel, setNivel] = useState(() => clonarNivel(nivelesCarJam[0]));
+  const [nivel, setNivel] = useState(() =>
+    crearNivelConPosicionesAleatorias(nivelesCarJam[0])
+  );
   const [vehiculos, setVehiculos] = useState(() => nivel.vehiculos);
   const [puntaje, setPuntaje] = useState(0);
   const [mensaje, setMensaje] = useState(MENSAJE_INICIAL);
@@ -84,7 +89,9 @@ export default function CarJam({ navigation }) {
       }
 
       const siguienteIndice = indiceNivel + 1;
-      const siguienteNivel = clonarNivel(nivelesCarJam[siguienteIndice]);
+      const siguienteNivel = crearNivelConPosicionesAleatorias(
+        nivelesCarJam[siguienteIndice]
+      );
 
       setIndiceNivel(siguienteIndice);
       setNivel(siguienteNivel);
@@ -154,10 +161,14 @@ export default function CarJam({ navigation }) {
       clearTimeout(temporizadorRef.current);
     }
 
-    const nivelReiniciado = clonarNivel(nivelesCarJam[indiceNivel]);
+    const nivelReiniciado = crearNivelConPosicionesAleatorias(
+      nivelesCarJam[indiceNivel]
+    );
     setNivel(nivelReiniciado);
     setVehiculos(nivelReiniciado.vehiculos);
-    setMensaje("Nivel reiniciado. Conservas los puntos anteriores.");
+    setMensaje(
+      "Nivel reiniciado con nuevas posiciones. Conservas los puntos anteriores."
+    );
     setVehiculoDestacado(null);
     setProcesando(false);
     bloqueoRef.current = false;

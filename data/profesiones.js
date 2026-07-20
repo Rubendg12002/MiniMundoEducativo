@@ -1,3 +1,5 @@
+import { mezclarElementos } from "../utils/aleatorio";
+
 const opcionesProfesiones = [
   {
     nombre: "doctor",
@@ -39,3 +41,10 @@ export const preguntasProfesiones = [
     opciones: opcionesProfesiones,
   },
 ];
+
+/** Crea una partida con preguntas y respuestas en posiciones diferentes. */
+export const crearPartidaProfesiones = (aleatorio = Math.random) =>
+  mezclarElementos(preguntasProfesiones, aleatorio).map((pregunta) => ({
+    ...pregunta,
+    opciones: mezclarElementos(pregunta.opciones, aleatorio),
+  }));

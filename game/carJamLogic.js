@@ -1,3 +1,5 @@
+import { mezclarElementos } from "../utils/aleatorio";
+
 const DIRECCIONES = {
   arriba: { fila: -1, columna: 0 },
   abajo: { fila: 1, columna: 0 },
@@ -217,4 +219,108 @@ export const clonarNivel = (nivel) => {
       activo: vehiculo.activo !== false,
     })),
   };
+};
+
+/** Obtiene una secuencia completa de salida o null si el tablero se bloquea. */
+export const obtenerSecuenciaSolucion = (nivel) => {
+  const copia = clonarNivel(nivel);
+  let restantes = copia.vehiculos;
+  const secuencia = [];
+
+  while (restantes.length > 0) {
+    const siguiente = restantes.find((vehiculo) =>
+      puedeSalir(vehiculo, restantes, copia.filas, copia.columnas)
+    );
+
+    if (!siguiente) {
+      return null;
+    }
+
+    secuencia.push(siguiente.id);
+    restantes = restantes.filter((vehiculo) => vehiculo.id !== siguiente.id);
+  }
+
+  return secuencia;
+};
+
+const crearCasillas = (filas, columnas) => {
+  const casillas = [];
+
+  for (let fila = 0; fila < filas; fila += 1) {
+    for (let columna = 0; columna < columnas; columna += 1) {
+      casillas.push({ fila, columna });
+    }
+  }
+
+  return casillas;
+};
+
+const crearCandidato = (nivel, casillas) => ({
+  ...nivel,
+  vehiculos: nivel.vehiculos.map((vehiculo, indice) => ({
+    ...vehiculo,
+    ...casillas[indice],
+    activo: true,
+  })),
+});
+
+/**
+ * Genera nuevas posiciones sin alterar las direcciones ni la apariencia.
+ * Solo acepta tableros válidos, diferentes, no triviales y resolubles.
+ */
+export const crearNivelConPosicionesAleatorias = (
+  nivel,
+  aleatorio = Math.random
+) => {
+  const base = clonarNivel(nivel);
+  const casillas = crearCasillas(base.filas, base.columnas);
+  const minimoMovidos = Math.ceil(base.vehiculos.length * 0.6);
+  const minimoBloqueados = Math.max(
+    1,
+    Math.ceil(base.vehiculos.length * 0.35)
+  );
+
+  const buscarCandidato = (exigirDificultad) => {
+    for (let intento = 0; intento < 500; intento += 1) {
+      const posiciones = mezclarElementos(casillas, aleatorio).slice(
+        0,
+        base.vehiculos.length
+      );
+      const candidato = crearCandidato(base, posiciones);
+      const movidos = candidato.vehiculos.filter(
+        (vehiculo, indice) =>
+          vehiculo.fila !== base.vehiculos[indice].fila ||
+          vehiculo.columna !== base.vehiculos[indice].columna
+      ).length;
+
+      if (movidos < minimoMovidos) {
+        continue;
+      }
+
+      const movibles = candidato.vehiculos.filter((vehiculo) =>
+        puedeSalir(
+          vehiculo,
+          candidato.vehiculos,
+          candidato.filas,
+          candidato.columnas
+        )
+      ).length;
+      const bloqueados = candidato.vehiculos.length - movibles;
+
+      if (
+        movibles === 0 ||
+        (exigirDificultad && bloqueados < minimoBloqueados)
+      ) {
+        continue;
+      }
+
+      if (obtenerSecuenciaSolucion(candidato)) {
+        return candidato;
+      }
+    }
+
+    return null;
+  };
+
+  return buscarCandidato(true) || buscarCandidato(false) || base;
 };

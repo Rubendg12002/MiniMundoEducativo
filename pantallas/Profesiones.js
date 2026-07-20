@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -9,27 +9,37 @@ import {
 } from "react-native";
 import Header from "../componentes/Header";
 import BarraInferior from "../componentes/BarraInferior";
-import { preguntasProfesiones } from "../data/profesiones";
+import { useFocusEffect } from "@react-navigation/native";
+import { crearPartidaProfesiones } from "../data/profesiones";
 
 export default function Profesiones({ navigation }) {
+  const [preguntas, setPreguntas] = useState(crearPartidaProfesiones);
   const [indice, setIndice] = useState(0);
   const [puntos, setPuntos] = useState(0);
 
-  const pregunta = preguntasProfesiones[indice];
+  useFocusEffect(
+    useCallback(() => {
+      setPreguntas(crearPartidaProfesiones());
+      setIndice(0);
+      setPuntos(0);
+    }, [])
+  );
+
+  const pregunta = preguntas[indice];
 
   const responder = (opcion) => {
     const nuevoPuntaje = opcion.nombre === pregunta.respuestaCorrecta ? puntos + 1 : puntos;
 
-    if (indice < preguntasProfesiones.length - 1) {
+    if (indice < preguntas.length - 1) {
       setPuntos(nuevoPuntaje);
       setIndice(indice + 1);
     } else {
       navigation.navigate("Resultados", {
         puntaje: nuevoPuntaje,
-        total: preguntasProfesiones.length,
+        total: preguntas.length,
         tipo: "Profesiones",
         mensaje:
-          nuevoPuntaje === preguntasProfesiones.length
+          nuevoPuntaje === preguntas.length
             ? "¡Excelente!"
             : "Sigue practicando",
         detalle: "Completaste el juego de profesiones",
@@ -62,7 +72,7 @@ export default function Profesiones({ navigation }) {
         </View>
 
         <Text style={styles.progreso}>
-          Pregunta {indice + 1} de {preguntasProfesiones.length}
+          Pregunta {indice + 1} de {preguntas.length}
         </Text>
       </View>
 
