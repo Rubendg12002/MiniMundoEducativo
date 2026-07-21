@@ -1,5 +1,11 @@
+/** Catálogo de vocales que se reconocen en todas las actividades. */
 export const VOCALES = ["A", "E", "I", "O", "U"];
 
+/**
+ * Actividades de discriminación auditiva y visual.
+ * Cada registro relaciona un animal, su onomatopeya, una imagen y el color
+ * usado para presentar la tarjeta en VocalesAnimales.js.
+ */
 export const actividadesVocales = [
   {
     id: "pato",
@@ -38,7 +44,12 @@ export const actividadesVocales = [
   },
 ];
 
-/** Cuenta las vocales presentes en un texto. */
+/**
+ * Cuenta las apariciones de cada vocal en un texto.
+ *
+ * @param {string} texto Texto que se analizará; por defecto, vacío.
+ * @returns {{A:number,E:number,I:number,O:number,U:number}} Conteo por vocal.
+ */
 export const contarVocales = (texto = "") => {
   const conteo = { A: 0, E: 0, I: 0, O: 0, U: 0 };
 
@@ -54,6 +65,7 @@ export const contarVocales = (texto = "") => {
   return conteo;
 };
 
+/** Total de respuestas correctas posibles en el juego completo. */
 export const totalVocalesActividad = actividadesVocales.reduce(
   (total, actividad) =>
     total +

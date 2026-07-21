@@ -1,6 +1,13 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+/**
+ * Indicador visual del avance de Car Jam.
+ * Pinta un punto por nivel y activa todos los puntos hasta el nivel actual.
+ *
+ * @param {{nivelActual:number,totalNiveles:number}} props Estado del avance.
+ * @returns {JSX.Element} Texto de nivel y puntos de progreso.
+ */
 export default function IndicadorNivel({ nivelActual, totalNiveles }) {
   return (
     <View style={styles.container}>

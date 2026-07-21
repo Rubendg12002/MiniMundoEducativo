@@ -25,6 +25,15 @@ const nombresJuegos = {
   Profesiones: "Profesiones",
 };
 
+/**
+ * Pantalla de bienvenida y perfil.
+ * Permite registrar el nombre local del jugador, consultar el último puntaje
+ * y entrar al menú principal. No muestra la barra inferior porque es el punto
+ * de entrada del flujo y tiene sus propios botones de acción.
+ *
+ * @param {{navigation: object}} props Propiedades entregadas por navegación.
+ * @returns {JSX.Element} Formulario inicial y resumen del último resultado.
+ */
 export default function Inicio({ navigation }) {
   const [nombre, setNombre] = useState("");
   const [ultimoResultado, setUltimoResultado] = useState(null);
@@ -52,6 +61,7 @@ export default function Inicio({ navigation }) {
     }, [])
   );
 
+  /** Valida y guarda el nombre antes de navegar al destino solicitado. */
   const guardarYContinuar = async (destino) => {
     if (!nombre.trim()) {
       Alert.alert("¿Cómo te llamas?", "Escribe tu nombre para guardar tu progreso.");
@@ -66,6 +76,7 @@ export default function Inicio({ navigation }) {
     }
   };
 
+  /** Acción del botón principal de inicio. */
   const comenzar = () => guardarYContinuar("Menu");
 
   return (

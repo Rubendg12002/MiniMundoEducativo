@@ -21,9 +21,18 @@ const nombresJuegos = {
   Profesiones: "Profesiones",
 };
 
+/**
+ * Pantalla de progreso e historial.
+ * Actualiza la lista cada vez que recibe foco para reflejar resultados recién
+ * guardados y permite borrar puntajes sin borrar el nombre del jugador.
+ *
+ * @param {{navigation: object}} props Propiedades entregadas por navegación.
+ * @returns {JSX.Element} Lista de resultados o estado vacío.
+ */
 export default function Historial({ navigation }) {
   const [resultados, setResultados] = useState([]);
 
+  /** Lee el historial persistido y lo coloca en el estado visual. */
   const cargarHistorial = useCallback(async () => {
     setResultados(await obtenerHistorial());
   }, []);
@@ -34,6 +43,7 @@ export default function Historial({ navigation }) {
     }, [cargarHistorial])
   );
 
+  /** Solicita confirmación antes de eliminar el progreso local. */
   const confirmarBorrado = () => {
     Alert.alert(
       "Borrar progreso",

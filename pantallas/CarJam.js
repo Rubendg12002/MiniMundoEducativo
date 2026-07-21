@@ -24,6 +24,17 @@ import { guardarProgresoCarJam } from "../storage/storage";
 
 const MENSAJE_INICIAL = "Toca un carro con el camino libre para sacarlo.";
 
+/**
+ * Juego de desatascar vehículos.
+ *
+ * Mantiene separado el nivel lógico (`nivel`) de los vehículos activos que se
+ * ven en pantalla (`vehiculos`). Los refs controlan timers y dobles pulsaciones
+ * sin provocar renders innecesarios. Cada nivel y cada reinicio obtiene una
+ * distribución nueva validada por game/carJamLogic.js.
+ *
+ * @param {{navigation: object}} props Propiedades entregadas por navegación.
+ * @returns {JSX.Element} Tablero, puntaje, pistas y controles de Car Jam.
+ */
 export default function CarJam({ navigation }) {
   const { width } = useWindowDimensions();
   const tamanoTablero = Math.min(width - 36, 390);
@@ -53,6 +64,7 @@ export default function CarJam({ navigation }) {
     []
   );
 
+  /** Ejecuta una acción una sola vez después de una demora controlada. */
   const programar = (accion, demora) => {
     if (temporizadorRef.current) {
       clearTimeout(temporizadorRef.current);
@@ -65,6 +77,7 @@ export default function CarJam({ navigation }) {
     }, demora);
   };
 
+  /** Guarda el nivel terminado y carga el siguiente o la pantalla final. */
   const avanzarNivel = (nuevoPuntaje) => {
     const esUltimoNivel = indiceNivel === nivelesCarJam.length - 1;
 
@@ -104,6 +117,10 @@ export default function CarJam({ navigation }) {
     }, 900);
   };
 
+  /**
+   * Intenta retirar un vehículo. Si el camino está bloqueado se muestra una
+   * ayuda; si está libre se elimina del estado y se comprueba el fin del nivel.
+   */
   const seleccionarVehiculo = (vehiculoId) => {
     if (bloqueoRef.current || transicionRef.current) {
       return;
@@ -156,6 +173,7 @@ export default function CarJam({ navigation }) {
     }
   };
 
+  /** Reinicia el nivel actual conservando los puntos ya obtenidos. */
   const reiniciarNivel = () => {
     if (temporizadorRef.current) {
       clearTimeout(temporizadorRef.current);
@@ -175,6 +193,7 @@ export default function CarJam({ navigation }) {
     transicionRef.current = false;
   };
 
+  /** Destaca el primer vehículo que tiene una salida disponible. */
   const mostrarPista = () => {
     if (procesando || transicionRef.current) {
       return;

@@ -1,5 +1,14 @@
 import { mezclarElementos } from "../utils/aleatorio";
 
+/**
+ * Reglas puras de Car Jam.
+ *
+ * Este módulo no conoce componentes de React ni modifica el estado de una
+ * pantalla. Trabaja con niveles descritos como `{filas, columnas, vehiculos}`
+ * y responde preguntas reutilizables: si una casilla está ocupada, si un
+ * carro puede llegar al borde, si un nivel es válido y cómo crear una
+ * configuración aleatoria que siga siendo resoluble.
+ */
 const DIRECCIONES = {
   arriba: { fila: -1, columna: 0 },
   abajo: { fila: 1, columna: 0 },
@@ -7,6 +16,7 @@ const DIRECCIONES = {
   derecha: { fila: 0, columna: 1 },
 };
 
+/** Comprueba que las dimensiones representen una cuadrícula positiva. */
 const dimensionesValidas = (filas, columnas) =>
   Number.isInteger(filas) &&
   filas > 0 &&
@@ -14,7 +24,12 @@ const dimensionesValidas = (filas, columnas) =>
   columnas > 0;
 
 /**
- * Obtiene la casilla siguiente según la dirección indicada.
+ * Obtiene la casilla contigua según la dirección indicada.
+ * @param {number} fila Fila actual.
+ * @param {number} columna Columna actual.
+ * @param {string} direccion Una de arriba, abajo, izquierda o derecha.
+ * @returns {{fila:number,columna:number}} Nueva coordenada.
+ * @throws {Error|TypeError} Si la dirección o coordenadas son inválidas.
  */
 export const obtenerSiguientePosicion = (fila, columna, direccion) => {
   const movimiento = DIRECCIONES[direccion];
@@ -35,6 +50,10 @@ export const obtenerSiguientePosicion = (fila, columna, direccion) => {
 
 /**
  * Indica si una posición está fuera de los límites del tablero.
+ * @param {{fila:number,columna:number}} posicion Coordenada a comprobar.
+ * @param {number} filas Alto lógico del tablero.
+ * @param {number} columnas Ancho lógico del tablero.
+ * @returns {boolean} true cuando la coordenada ya está fuera.
  */
 export const estaFueraDelTablero = (posicion, filas, columnas) => {
   if (!dimensionesValidas(filas, columnas)) {
@@ -59,6 +78,11 @@ export const estaFueraDelTablero = (posicion, filas, columnas) => {
 
 /**
  * Revisa si una casilla contiene otro vehículo activo.
+ * @param {Array<object>} vehiculos Vehículos actualmente presentes.
+ * @param {number} fila Fila buscada.
+ * @param {number} columna Columna buscada.
+ * @param {string|null} idIgnorado Vehículo que no debe bloquearse a sí mismo.
+ * @returns {boolean} true si la casilla está ocupada.
  */
 export const estaPosicionOcupada = (
   vehiculos,
@@ -82,6 +106,14 @@ export const estaPosicionOcupada = (
 
 /**
  * Determina si un vehículo tiene el camino libre hasta salir del tablero.
+ * Se avanza una celda a la vez y se inspeccionan únicamente vehículos activos;
+ * los carros que ya salieron dejan de bloquear el recorrido.
+ *
+ * @param {object} vehiculo Carro que se quiere mover.
+ * @param {Array<object>} vehiculos Estado actual del tablero.
+ * @param {number} filas Alto del tablero.
+ * @param {number} columnas Ancho del tablero.
+ * @returns {boolean} true si no hay obstáculos entre el carro y el borde.
  */
 export const puedeSalir = (vehiculo, vehiculos, filas, columnas) => {
   if (!vehiculo || !vehiculo.id) {
@@ -133,7 +165,11 @@ export const puedeSalir = (vehiculo, vehiculos, filas, columnas) => {
 };
 
 /**
- * Valida dimensiones, identificadores y posiciones de un nivel.
+ * Valida dimensiones, identificadores, direcciones, recursos visuales y
+ * posiciones de un nivel. Se devuelve una lista completa de errores para que
+ * el diagnóstico sea útil al agregar nuevos niveles.
+ * @param {object} nivel Plantilla o tablero de Car Jam.
+ * @returns {{esValido:boolean,errores:Array<string>}} Resultado de validación.
  */
 export const validarNivel = (nivel) => {
   const errores = [];
@@ -204,6 +240,11 @@ export const validarNivel = (nivel) => {
 
 /**
  * Crea una copia independiente del nivel y sus vehículos.
+ * También normaliza `activo` para que cada nueva partida empiece con todos
+ * los vehículos disponibles, sin alterar la plantilla importada.
+ * @param {object} nivel Nivel que se quiere clonar.
+ * @returns {object} Copia segura para usar como estado de React.
+ * @throws {Error} Cuando la plantilla no supera validarNivel.
  */
 export const clonarNivel = (nivel) => {
   const validacion = validarNivel(nivel);
@@ -221,7 +262,16 @@ export const clonarNivel = (nivel) => {
   };
 };
 
-/** Obtiene una secuencia completa de salida o null si el tablero se bloquea. */
+/**
+ * Obtiene una secuencia completa de salida o null si el tablero se bloquea.
+ * Usa una estrategia voraz: en cada paso toma el primer carro actualmente
+ * libre, lo retira de la copia y vuelve a calcular los bloqueos. Retirar un
+ * carro solo puede liberar caminos, por lo que una secuencia encontrada es
+ * una solución válida para la mecánica del juego.
+ *
+ * @param {object} nivel Nivel que se desea resolver.
+ * @returns {Array<string>|null} IDs en orden de salida o null si no hay ruta.
+ */
 export const obtenerSecuenciaSolucion = (nivel) => {
   const copia = clonarNivel(nivel);
   let restantes = copia.vehiculos;
@@ -243,6 +293,7 @@ export const obtenerSecuenciaSolucion = (nivel) => {
   return secuencia;
 };
 
+/** Genera todas las coordenadas disponibles de una cuadrícula. */
 const crearCasillas = (filas, columnas) => {
   const casillas = [];
 
@@ -255,6 +306,7 @@ const crearCasillas = (filas, columnas) => {
   return casillas;
 };
 
+/** Asigna una coordenada única a cada vehículo sin cambiar su identidad. */
 const crearCandidato = (nivel, casillas) => ({
   ...nivel,
   vehiculos: nivel.vehiculos.map((vehiculo, indice) => ({
@@ -266,7 +318,17 @@ const crearCandidato = (nivel, casillas) => ({
 
 /**
  * Genera nuevas posiciones sin alterar las direcciones ni la apariencia.
- * Solo acepta tableros válidos, diferentes, no triviales y resolubles.
+ *
+ * Se prueban candidatos aleatorios y se descartan los que no cumplan todos
+ * los criterios: mover suficientes carros respecto a la plantilla, tener al
+ * menos un carro libre, conservar una cantidad mínima de bloqueos, no
+ * superponer vehículos y contar con una secuencia completa de solución.
+ * Primero se intenta una dificultad educativa; si no se encuentra después de
+ * varios intentos, se acepta una configuración más sencilla pero resoluble.
+ *
+ * @param {object} nivel Plantilla base validada.
+ * @param {() => number} aleatorio Generador opcional para pruebas repetibles.
+ * @returns {object} Nivel nuevo, independiente y resoluble.
  */
 export const crearNivelConPosicionesAleatorias = (
   nivel,

@@ -12,6 +12,15 @@ import BarraInferior from "../componentes/BarraInferior";
 import { useFocusEffect } from "@react-navigation/native";
 import { crearPartidaProfesiones } from "../data/profesiones";
 
+/**
+ * Juego de identificación de profesiones.
+ * Cada vez que la pantalla recupera el foco se crea una partida nueva, de
+ * manera que tanto el orden de preguntas como el de las tarjetas cambia sin
+ * alterar el banco original de datos.
+ *
+ * @param {{navigation: object}} props Propiedades entregadas por navegación.
+ * @returns {JSX.Element} Pregunta actual y sus cuatro opciones visuales.
+ */
 export default function Profesiones({ navigation }) {
   const [preguntas, setPreguntas] = useState(crearPartidaProfesiones);
   const [indice, setIndice] = useState(0);
@@ -27,6 +36,7 @@ export default function Profesiones({ navigation }) {
 
   const pregunta = preguntas[indice];
 
+  /** Comprueba la opción, actualiza el puntaje y avanza o muestra resultados. */
   const responder = (opcion) => {
     const nuevoPuntaje = opcion.nombre === pregunta.respuestaCorrecta ? puntos + 1 : puntos;
 

@@ -14,6 +14,14 @@ import Header from "../componentes/Header";
 import BarraInferior from "../componentes/BarraInferior";
 import { obtenerNombre } from "../storage/storage";
 
+/**
+ * Menú de actividades disponibles.
+ * Carga el nombre al recuperar el foco y presenta exclusivamente los juegos
+ * vigentes: Vocales y sonidos, Profesiones y Car Jam.
+ *
+ * @param {{navigation: object}} props Propiedades entregadas por navegación.
+ * @returns {JSX.Element} Tarjetas de selección de juegos.
+ */
 export default function Menu({ navigation }) {
   const [nombre, setNombre] = useState("");
 

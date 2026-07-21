@@ -2,6 +2,13 @@ import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+/**
+ * Encabezado reutilizable de las pantallas internas.
+ * Muestra la identidad visual y ofrece un acceso consistente al inicio.
+ *
+ * @param {{navigation: object}} props Propiedades de React Navigation.
+ * @returns {JSX.Element} Barra superior con logo, título y botón de inicio.
+ */
 export default function Header({ navigation }) {
   return (
     <View style={styles.header}>

@@ -1,3 +1,11 @@
+/**
+ * Plantillas base de Car Jam.
+ *
+ * Las posiciones de este catálogo sirven como referencia y como respaldo;
+ * CarJam.js las clona y carJamLogic.js genera posiciones nuevas válidas para
+ * cada partida. Dirección, apariencia e identificador pertenecen al carro y
+ * se conservan aunque cambie su casilla.
+ */
 const nivelesCarJam = [
   {
     id: 1,

@@ -23,6 +23,16 @@ const texturas = {
   negro: require("../../assets/imagenes/carJam/car-negro.png"),
 };
 
+/**
+ * Representa un carro interactivo dentro de una celda.
+ * La textura se elige por `vehiculo.textura` y la imagen gira según la
+ * dirección lógica del carro; la flecha adicional hace la dirección evidente
+ * para niños que todavía no interpretan la orientación de la imagen.
+ *
+ * @param {{vehiculo:object,tamano:number,onPress:Function,
+ * deshabilitado:boolean,destacado:boolean}} props Datos visuales y eventos.
+ * @returns {JSX.Element} Botón absoluto que representa el vehículo.
+ */
 export default function VehiculoCarJam({
   vehiculo,
   tamano,

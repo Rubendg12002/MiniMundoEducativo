@@ -12,8 +12,17 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { guardarResultado, obtenerNombre } from "../storage/storage";
 
+/** Vocales mostradas en el resumen específico del juego de sonidos. */
 const VOCALES = ["A", "E", "I", "O", "U"];
 
+/**
+ * Resultado común para todos los minijuegos.
+ * Lee los datos de route.params, guarda la partida una sola vez al montar y
+ * ofrece volver a jugar, consultar el historial o regresar al menú.
+ *
+ * @param {{navigation: object, route: {params?: object}}} props Datos de ruta.
+ * @returns {JSX.Element} Tarjeta con puntaje, mensaje y acciones posteriores.
+ */
 export default function Resultados({ navigation, route }) {
   const puntaje = route.params?.puntaje ?? 0;
   const total = route.params?.total ?? 1;
@@ -57,6 +66,7 @@ export default function Resultados({ navigation, route }) {
     };
   }, [puntaje, total, tipo]);
 
+  /** Reabre el juego cuyo identificador se recibió en `tipo`. */
   const volverAJugar = () => navigation.navigate(tipo);
 
   return (

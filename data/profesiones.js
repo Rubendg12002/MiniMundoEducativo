@@ -1,5 +1,6 @@
 import { mezclarElementos } from "../utils/aleatorio";
 
+/** Opciones visuales compartidas por cada pregunta de profesiones. */
 const opcionesProfesiones = [
   {
     nombre: "doctor",
@@ -19,6 +20,10 @@ const opcionesProfesiones = [
   },
 ];
 
+/**
+ * Banco inmutable de preguntas. La pantalla nunca modifica este arreglo:
+ * crearPartidaProfesiones clona y mezcla sus preguntas y opciones.
+ */
 export const preguntasProfesiones = [
   {
     pregunta: "¿Cuál es el doctor?",
@@ -42,7 +47,14 @@ export const preguntasProfesiones = [
   },
 ];
 
-/** Crea una partida con preguntas y respuestas en posiciones diferentes. */
+/**
+ * Crea una partida independiente con preguntas y respuestas reordenadas.
+ * La respuesta correcta se conserva por nombre, por lo que el cambio de
+ * posición no altera la evaluación del jugador.
+ *
+ * @param {() => number} aleatorio Generador opcional para pruebas repetibles.
+ * @returns {Array<object>} Preguntas preparadas para una nueva partida.
+ */
 export const crearPartidaProfesiones = (aleatorio = Math.random) =>
   mezclarElementos(preguntasProfesiones, aleatorio).map((pregunta) => ({
     ...pregunta,

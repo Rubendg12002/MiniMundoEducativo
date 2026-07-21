@@ -20,8 +20,19 @@ import {
   VOCALES,
 } from "../data/actividadesVocales";
 
+/**
+ * Juego de conciencia fonológica.
+ *
+ * El jugador escucha una onomatopeya, selecciona las vocales que aparecen en
+ * sus letras y avanza por cinco animales. La pantalla conserva el conteo
+ * global de vocales y los errores para enviarlos a Resultados al finalizar.
+ */
 const CONTEO_INICIAL = { A: 0, E: 0, I: 0, O: 0, U: 0 };
 
+/**
+ * @param {{navigation: object}} props Propiedades entregadas por el stack.
+ * @returns {JSX.Element} Actividad interactiva de vocales y sonidos.
+ */
 export default function VocalesAnimales({ navigation }) {
   const [indice, setIndice] = useState(0);
   const [seleccionadas, setSeleccionadas] = useState([]);
@@ -48,6 +59,7 @@ export default function VocalesAnimales({ navigation }) {
     seleccionadas.includes(posicion)
   );
 
+  /** Detiene cualquier audio anterior y reproduce la onomatopeya actual. */
   const reproducirSonido = useCallback(async () => {
     await Speech.stop();
     Speech.speak(actividad.sonido.toLowerCase(), {
@@ -68,6 +80,10 @@ export default function VocalesAnimales({ navigation }) {
     };
   }, [reproducirSonido]);
 
+  /**
+   * Procesa una pulsación de letra: ignora selecciones repetidas, suma un
+   * error para consonantes o registra la vocal encontrada.
+   */
   const tocarLetra = (letra, posicion) => {
     if (seleccionadas.includes(posicion)) {
       return;
@@ -96,6 +112,7 @@ export default function VocalesAnimales({ navigation }) {
     );
   };
 
+  /** Valida la actividad y navega al siguiente animal o a Resultados. */
   const continuar = () => {
     if (!actividadCompleta) {
       setMensaje("Todavía falta encerrar una vocal.");

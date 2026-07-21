@@ -23,6 +23,14 @@ const accesos = [
   },
 ];
 
+/**
+ * Navegación inferior común para las pantallas de juegos y progreso.
+ * `activo` solo controla el resaltado visual; el destino real lo define cada
+ * entrada del catálogo `accesos`.
+ *
+ * @param {{navigation: object, activo?: string}} props Propiedades del menú.
+ * @returns {JSX.Element} Barra con accesos a Juegos, Progreso y Perfil.
+ */
 export default function BarraInferior({ navigation, activo = "menu" }) {
   return (
     <View accessibilityRole="toolbar" style={styles.nav}>

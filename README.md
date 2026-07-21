@@ -43,6 +43,21 @@ MiniMundoEducativo/
 
 No se requiere backend ni conexión de red.
 
+## Guía del código
+
+La aplicación está organizada por responsabilidad:
+
+- `App.js` monta el contenedor de navegación y `index.js` registra el punto de entrada de Expo.
+- `navegacion/AppNavigator.js` contiene las rutas del stack y relaciona cada nombre de ruta con su pantalla.
+- `pantallas/` contiene las vistas y el estado de cada flujo: perfil (`Inicio`), selección (`Menu`), juegos, resultados e historial.
+- `componentes/` contiene piezas reutilizables de interfaz. `componentes/carJam/` separa el tablero, el carro y el indicador de nivel.
+- `data/` contiene catálogos declarativos de sonidos, profesiones y niveles; las pantallas controlan la interacción.
+- `game/carJamLogic.js` contiene reglas puras y validaciones, sin renderizar componentes ni acceder al almacenamiento.
+- `utils/aleatorio.js` concentra la mezcla Fisher-Yates y permite inyectar un generador reproducible en pruebas.
+- `storage/storage.js` es la única capa que accede a AsyncStorage y normaliza los datos persistidos.
+
+Los archivos de configuración tienen responsabilidades separadas: `app.json` define identidad, iconos, splash y ajustes de Android/iOS; `eas.json` define los perfiles de compilación de EAS; `package.json` declara dependencias y comandos; y `package-lock.json` fija las versiones instaladas para que las instalaciones sean reproducibles.
+
 ## Requisitos
 
 - Node.js 20.19 o posterior.
